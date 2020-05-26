@@ -13,11 +13,19 @@ class SearchPaymentController {
                                       .with('student', (query) =>{query.setVisible(['username', 'matricula'])})
                                       .with('user', (query) =>{query.setVisible(['username', 'email'])})
                                       .fetch()
-
-
 return payment_today
+  }
 
+  async show_month({auth, request, response}){
 
+    const { date } = request.all();
+    const parsedDate = DateFNS.parseISO(date)
+    const payment_today = await Payment.query()
+                                      .whereBetween('data_pagamento', [DateFNS.startOfMonth(parsedDate), DateFNS.endOfMonth(parsedDate)])
+                                      .with('student', (query) =>{query.setVisible(['username', 'matricula'])})
+                                      .with('user', (query) =>{query.setVisible(['username', 'email'])})
+                                      .fetch()
+return payment_today
   }
 
 }

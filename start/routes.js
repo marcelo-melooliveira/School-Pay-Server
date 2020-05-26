@@ -21,6 +21,7 @@ Route.group(()=>{
   Route.post('payment', 'PaymentController.boleto')
   Route.get('user-payment', 'UserPaymentController.index')
   Route.get('search-payments-today', 'SearchPaymentController.show_today')
+  Route.get('search-payments-month', 'SearchPaymentController.show_month')
   
   Route.get('students', 'StudentController.index')
   Route.post('students', 'StudentController.store')
