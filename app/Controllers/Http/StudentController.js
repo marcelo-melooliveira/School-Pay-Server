@@ -3,7 +3,17 @@ const Student = use('App/Models/Student')
 
 class StudentController {
  async index(){
-    const students = await Student.query().select('id', 'username', 'matricula').fetch()
+    const students = await Student.query().select('id',
+                                                  'username',
+                                                  'matricula',
+                                                  'cpf',
+                                                  'rg',
+                                                  'endereço',
+                                                  'telefone',
+                                                  'valor_mensalidade',
+                                                  'updated_at'
+
+                                                  ).fetch()
 
     return students
   }
