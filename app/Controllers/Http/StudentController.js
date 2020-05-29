@@ -8,12 +8,14 @@ class StudentController {
                                                   'matricula',
                                                   'cpf',
                                                   'rg',
-                                                  'endereço',
+                                                  'endereco',
                                                   'telefone',
                                                   'valor_mensalidade',
                                                   'updated_at'
 
-                                                  ).fetch()
+                                                  )
+                                                  .orderBy('username', 'asc')
+                                                  .fetch()
 
     return students
   }
@@ -24,7 +26,41 @@ class StudentController {
 
     return student
   }
+
+  async update({request, response}){
+
+    console.log("entrou na update")
+    try {
+      const { id,
+        username,
+        matricula,
+        cpf,
+        rg,
+        endereco,
+        telefone,
+        valor_mensalidade} = request.all()
+
+        const student = await Student.findByOrFail('id', id)
+
+        student.username = username
+        student.matricula = matricula
+        student.cpf = cpf
+        student.rg = rg
+        student.endereco = endereco
+        student.telefone = telefone
+        student.valor_mensalidade = valor_mensalidade
+
+        await student.save()
+
+        return response.status(200).send({sucess: true})
+    }catch(err){
+      return response.status(err.status).send({sucess: false, error: {message:'Algo deu errado ao editar o usuário'}})
+    }
+    
+  }
 }
+
+
 
 module.exports = StudentController
 

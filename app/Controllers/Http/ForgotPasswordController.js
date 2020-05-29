@@ -36,7 +36,7 @@ class ForgotPasswordController {
 
   async update({ request, response }){
 
-    console.log("entrou no update")
+    //console.log("entrou no update")
 
     try{
         const { token, password } = request.all()

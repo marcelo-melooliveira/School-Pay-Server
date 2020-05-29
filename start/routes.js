@@ -25,6 +25,7 @@ Route.group(()=>{
   
   Route.get('students', 'StudentController.index')
   Route.post('students', 'StudentController.store')
+  Route.put('students', 'StudentController.update')
 
   Route.post('vinculo', 'VinculacaoController.store')
   Route.get('vinculo', 'VinculacaoController.show')

@@ -4,7 +4,7 @@ const DateFNS = require('date-fns');
 
 class SearchPaymentController {
 
-  async show_today({auth, request, response}){
+  async show_today({request}){
 
     const { date } = request.all();
     const parsedDate = DateFNS.parseISO(date)
@@ -16,7 +16,7 @@ class SearchPaymentController {
 return payment_today
   }
 
-  async show_month({auth, request, response}){
+  async show_month({request}){
 
     const { date } = request.all();
     const parsedDate = DateFNS.parseISO(date)
