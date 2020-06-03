@@ -1,8 +1,9 @@
 'use strict'
 const Payment = use('App/Models/Payment')
-const MercadoPago = require('mercadopago');
+const Student = use('App/Models/Student')
+const MercadoPago = require('mercadopago')
 const Env = use('Env')
-const UIDGenerator = require('uid-generator');
+const UIDGenerator = require('uid-generator')
 
 class PaymentController {
 
@@ -80,12 +81,34 @@ async boleto({ request, response, auth }){
     access_token: Env.get('MP_ACCESS_TOKEN'),
   });
 
-  const { student_id, email, description } = request.all()
+  const { student_id,
+          first_name,
+          last_name,
+          email,
+          cpf,
+          description,
+          valor_mensalidade } = request.all()
+
+ let amount = null;
+ 
+    if(!auth.user.admin){
+      amount = valor_mensalidade
+    }else{
+      try{
+        const student = await Student.findByOrFail('id', student_id);
+        amount = student.valor_mensalidade;
+      }catch(err){
+        return ({sucess: false, error: 'Aluno não encontado'})
+      }
+    }
+
+    if(amount == null || amount == 0){
+      return ({sucess: false, error: 'A mensalidade não pode ser zero'})
+    }
 
  const uidgen = new UIDGenerator();
  const ref = await uidgen.generate();
 
-console.log("entrou no boleto")
 
   const pay =  await Payment.create({
     user_id: auth.user.id,
@@ -103,20 +126,20 @@ console.log("entrou no boleto")
     payment_method_id: 'bolbradesco',
     payer: {
       email: email,
-      first_name: 'Laura',
-      last_name: 'Tais',
+      first_name: first_name,
+      last_name: last_name,
       identification: {
           type: 'CPF',
-          number: '19119119100'
+          number: cpf
       },
-      address:  {
-          zip_code: '06233200',
-          street_name: 'Av. das Nações Unidas',
-          street_number: '3003',
-          neighborhood: 'Bonfim',
-          city: 'Osasco',
-          federal_unit: 'SP'
-      }
+      // address:  {
+      //     zip_code: '06233200',
+      //     street_name: 'Av. das Nações Unidas',
+      //     street_number: '3003',
+      //     neighborhood: 'Bonfim',
+      //     city: 'Osasco',
+      //     federal_unit: 'SP'
+      // }
     }
   };
 
@@ -126,17 +149,17 @@ console.log("entrou no boleto")
     const sucess = await pay.save();
     if(sucess){
       //console.log("chegou no sucess")
-      return ({url: data.body.transaction_details.external_resource_url, barcode: data.body.barcode.content})
+      return ({sucess: true, url: data.body.transaction_details.external_resource_url, barcode: data.body.barcode.content})
      
     }
       
 
   }catch(err){
-    return response.send(err.message);
+    return response.send({sucess: false, error: err.message});
   }
   
 
-}
+ }
 
 }
 

@@ -11,6 +11,7 @@ class StudentController {
                                                   'endereco',
                                                   'telefone',
                                                   'valor_mensalidade',
+                                                  'nome_responsavel',
                                                   'updated_at'
 
                                                   )
@@ -29,7 +30,7 @@ class StudentController {
 
   async update({request, response}){
 
-    console.log("entrou na update")
+    
     try {
       const { id,
         username,
@@ -38,7 +39,8 @@ class StudentController {
         rg,
         endereco,
         telefone,
-        valor_mensalidade} = request.all()
+        valor_mensalidade,
+        nome_responsavel} = request.all()
 
         const student = await Student.findByOrFail('id', id)
 
@@ -49,12 +51,33 @@ class StudentController {
         student.endereco = endereco
         student.telefone = telefone
         student.valor_mensalidade = valor_mensalidade
+        student.nome_responsavel = nome_responsavel
 
         await student.save()
 
         return response.status(200).send({sucess: true})
     }catch(err){
       return response.status(err.status).send({sucess: false, error: {message:'Algo deu errado ao editar o usuário'}})
+    }
+    
+  }
+
+
+  async destroy({ auth, params}){
+
+    if(auth.user.admin){
+      const student = await Student.query()
+                             .where({id:params.id})
+                            .delete()
+        if(student){
+        return ({sucess: true})
+        
+        }else{
+          return ({sucess:false, error:'Aluno não encontrado'})
+        }
+      
+    }else{
+      return ({error:'Você não possui alterização'})
     }
     
   }

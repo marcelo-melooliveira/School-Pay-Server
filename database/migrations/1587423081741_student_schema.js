@@ -7,12 +7,14 @@ class StudentSchema extends Schema {
   up () {
     this.create('students', (table) => {
       table.increments()
-      table.string('username', 80).notNullable()
-      table.bigInteger('matricula')
-      table.string('cpf', 15)
-      table.string('rg', 15)
-      table.string('endereço', 254)
-      table.string('telefone', 15)
+      table.float('valor_mensalidade')
+      table.string('username')
+      table.string('matricula')
+      table.string('cpf')
+      table.string('rg')
+      table.string('endereco')
+      table.string('telefone')
+      table.string('nome_responsavel')
       table.timestamps()
     })
   }

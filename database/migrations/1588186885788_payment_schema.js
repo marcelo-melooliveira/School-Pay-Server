@@ -22,12 +22,12 @@ class PaymentSchema extends Schema {
       .onDelete('CASCADE')
 
       table.string('preference').notNullable()
-
       table.string('tipo_pagamento')
-      
       table.string('status').notNullable()
-
       table.string('ref')
+      table.string('valor_pago')
+      table.string('data_ref')
+
 
       table.timestamp('data_criacao', { useTz: false });
       table.timestamp('data_pagamento', { useTz: false });

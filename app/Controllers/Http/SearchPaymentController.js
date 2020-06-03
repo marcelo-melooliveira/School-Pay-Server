@@ -18,10 +18,9 @@ return payment_today
 
   async show_month({request}){
 
-    const { date } = request.all();
-    const parsedDate = DateFNS.parseISO(date)
+    const { data_ref } = request.all();
     const payment_today = await Payment.query()
-                                      .whereBetween('data_pagamento', [DateFNS.startOfMonth(parsedDate), DateFNS.endOfMonth(parsedDate)])
+                                      .where({data_ref : data_ref})
                                       .with('student', (query) =>{query.setVisible(['username', 'matricula'])})
                                       .with('user', (query) =>{query.setVisible(['username', 'email'])})
                                       .fetch()

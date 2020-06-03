@@ -13,7 +13,9 @@ Route.post('sessions', 'SessionController.store')
 Route.post('passwords', 'ForgotPasswordController.store')
 Route.put('passwords', 'ForgotPasswordController.update')
 
-Route.get('status-payment/:ref/:message', 'StatusPaymentController.update')
+Route.get('search-status-payment/:ref', 'StatusPaymentController.show')
+Route.post('update-status-payment/:ref', 'StatusPaymentController.update')
+
 
 
 Route.group(()=>{
@@ -26,6 +28,7 @@ Route.group(()=>{
   Route.get('students', 'StudentController.index')
   Route.post('students', 'StudentController.store')
   Route.put('students', 'StudentController.update')
+  Route.delete('students/:id', 'StudentController.destroy')
 
   Route.post('vinculo', 'VinculacaoController.store')
   Route.get('vinculo', 'VinculacaoController.show')
