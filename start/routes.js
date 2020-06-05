@@ -4,7 +4,7 @@
 const Route = use('Route')
 
 Route.get('/', () => {
-  return { greeting: 'Marcelo no adonisJs 13/05!' }
+  return { greeting: 'Servidor no ar, configurado por Marcelo Melo!' }
 })
 
 Route.post('users', 'UserController.store')
