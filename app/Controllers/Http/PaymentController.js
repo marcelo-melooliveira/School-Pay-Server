@@ -141,7 +141,7 @@ async boleto({ request, response, auth }){
       //     federal_unit: 'SP'
       // }
     },
-    notification_url :`https://mellus.com.br/${ref}`,
+    notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
   };
 
   try{
