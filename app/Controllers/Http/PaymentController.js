@@ -115,7 +115,7 @@ async boleto({ request, response, auth }){
     student_id: student_id,
     preference: 'nula',
     tipo_pagamento: 'boleto',
-    status: 'Pendente',
+    status: 'S/N',
     ref: ref,
     data_criacao: new Date()
   });
@@ -140,7 +140,8 @@ async boleto({ request, response, auth }){
       //     city: 'Osasco',
       //     federal_unit: 'SP'
       // }
-    }
+    },
+    notification_url :`https://mellus.com.br/${ref}`,
   };
 
   try{
