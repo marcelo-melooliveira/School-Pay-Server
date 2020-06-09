@@ -87,7 +87,8 @@ async boleto({ request, response, auth }){
           email,
           cpf,
           description,
-          valor_mensalidade } = request.all()
+          valor_mensalidade,
+          data_ref } = request.all()
 
  let amount = null;
  
@@ -117,7 +118,9 @@ async boleto({ request, response, auth }){
     tipo_pagamento: 'boleto',
     status: 'S/N',
     ref: ref,
-    data_criacao: new Date()
+    data_criacao: new Date(),
+    data_ref: data_ref
+
   });
 
   let payment_data = {
