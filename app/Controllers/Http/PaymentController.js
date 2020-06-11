@@ -158,7 +158,12 @@ async boleto({ request, response, auth }){
     const sucess = await pay.save();
     if(sucess){
       //console.log("chegou no sucess")
-      return ({sucess: true, url: data.body.transaction_details.external_resource_url, barcode: data.body.barcode.content})
+      return ({
+        sucess: true,
+        url: data.body.transaction_details.external_resource_url,
+        amount: data.body.transaction_details.total_paid_amount,
+        barcode: data.body.barcode.content
+      })
      
     }
       
