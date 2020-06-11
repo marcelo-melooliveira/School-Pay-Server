@@ -10,11 +10,12 @@ class SessionController {
       if(user){
         const token = await auth.attempt(email, password)
 
-        const { username, admin} = user;
+        const { nome, sobrenome, admin} = user;
 
     return response.json({
       user: {
-        username,
+        nome,
+        sobrenome,
         email,
         admin
       },

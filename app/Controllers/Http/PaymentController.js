@@ -81,7 +81,7 @@ async boleto({ request, response, auth }){
     access_token: Env.get('MP_ACCESS_TOKEN'),
   });
 
-  const { student_id,
+  let {   student_id,
           first_name,
           last_name,
           email,
@@ -89,23 +89,28 @@ async boleto({ request, response, auth }){
           description,
           valor_mensalidade,
           data_ref } = request.all()
-
- let amount = null;
  
-    if(!auth.user.admin){
-      amount = valor_mensalidade
-    }else{
+    if(auth.user.admin == false){
       try{
         const student = await Student.findByOrFail('id', student_id);
-        amount = student.valor_mensalidade;
+          valor_mensalidade = student.valor_mensalidade
+          first_name = auth.user.nome
+          last_name = auth.user.sobrenome;
+          email = auth.user.email
+          cpf = auth.user.cpf
+          description = `Mensalidade SchoolPay - ${student.username}`
+
       }catch(err){
         return ({sucess: false, error: 'Aluno não encontado'})
       }
     }
 
-    if(amount == null || amount == 0){
+    if(valor_mensalidade == null || valor_mensalidade == 0){
       return ({sucess: false, error: 'A mensalidade não pode ser zero'})
     }
+    
+   // console.log({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
+    //return ({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
 
  const uidgen = new UIDGenerator();
  const ref = await uidgen.generate();
@@ -124,7 +129,7 @@ async boleto({ request, response, auth }){
   });
 
   let payment_data = {
-    transaction_amount: 100,
+    transaction_amount: valor_mensalidade,
     description: description,
     payment_method_id: 'bolbradesco',
     payer: {
