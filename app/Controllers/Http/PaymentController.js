@@ -7,20 +7,58 @@ const UIDGenerator = require('uid-generator')
 
 class PaymentController {
 
-  async store({ request, response, auth }){
+  async cartao({ request, response, auth }){
   
     MercadoPago.configure({
       sandbox: Env.get('MP_SANDBOX'),
       access_token: Env.get('MP_ACCESS_TOKEN'),
     });
-
-    const { student_id, email, description, amount } = request.all()
-
+  
+    let {   student_id,
+            first_name,
+            last_name,
+            email,
+            cpf,
+            description,
+            valor_mensalidade,
+            data_ref } = request.all()
+   
+      if(auth.user.admin == false){
+        try{
+          const student = await Student.findByOrFail('id', student_id);
+            valor_mensalidade = student.valor_mensalidade
+            first_name = auth.user.nome
+            last_name = auth.user.sobrenome;
+            email = auth.user.email
+            cpf = auth.user.cpf
+            description = `Mensalidade SchoolPay - ${student.username}`
+  
+        }catch(err){
+          return ({sucess: false, error: 'Aluno não encontado'})
+        }
+      }
+  
+      if(valor_mensalidade == null || valor_mensalidade == 0){
+        return ({sucess: false, error: 'A mensalidade não pode ser zero'})
+      }
+      
+      //console.log({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
+      // return ({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
+  
+   const uidgen = new UIDGenerator();
+   const ref = await uidgen.generate();
+  
+  
     const pay =  await Payment.create({
       user_id: auth.user.id,
       student_id: student_id,
       preference: 'nula',
-      status: 'Pendente',
+      tipo_pagamento: 'cartao',
+      status: 'S/N',
+      ref: ref,
+      data_criacao: new Date(),
+      data_ref: data_ref
+  
     });
     
     const item = {
@@ -28,33 +66,39 @@ class PaymentController {
         description : description,
         quantity: 1,
         currency_id: 'BRL',
-        unit_price: parseFloat(amount),
+        unit_price: valor_mensalidade,
       }
 
     //Create purchase item object template
-    const purchaseOrder = {
+    const payment_data = {
         items: [item],
         payer : {
-          email: email
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          identification: {
+              type: 'CPF',
+              number: cpf
+          },
         },
         // "payment_methods": {
         //   "excluded_payment_types":[
         //       {"id":"credit_card"}
         //   ]
         // },
-        auto_return : "all",
+        auto_return : "approved",
         //external_reference : id,
-        
+        notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
         back_urls : {
-          success : "http://68.183.156.246:3000/payments/success/?user=teste",
-          pending : "http://68.183.156.246:3000/payments/pending/?user=teste",
-          failure : "http://68.183.156.246:3000/payments/failure/?user=teste",
+          success : "https://mellus.com.br/",
+         // pending : "http://68.183.156.246:3000/payments/pending/?user=teste",
+         // failure : "http://68.183.156.246:3000/payments/failure/?user=teste",
         }
       }
   
       //Generate init_point to checkout
       try {
-        const preference = await MercadoPago.preferences.create(purchaseOrder);
+        const preference = await MercadoPago.preferences.create(payment_data);
         //console.log(preference)
       
 
@@ -62,12 +106,11 @@ class PaymentController {
         const sucess = await pay.save();
 
         if(sucess)
-        return preference.body.sandbox_init_point
+        return ({preference_id: preference.body.id, public_key: Env.get('MP_PUBLIC_KEY')})
         //return response.redirect(`${preference.body.sandbox_init_point}`);
-
         
       }catch(err){
-        return response.send(err.message);
+        return response.send({sucess: false, error: err.message});
       }
 
   }
@@ -109,8 +152,8 @@ async boleto({ request, response, auth }){
       return ({sucess: false, error: 'A mensalidade não pode ser zero'})
     }
     
-   // console.log({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
-    //return ({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
+    //console.log({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
+    // return ({first_name, last_name, cpf, email, description, admin: auth.user.admin, valor_mensalidade})
 
  const uidgen = new UIDGenerator();
  const ref = await uidgen.generate();

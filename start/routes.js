@@ -20,7 +20,8 @@ Route.post('update-status-payment/:ref', 'StatusPaymentController.update')
 
 Route.group(()=>{
   //Route.post('payment', 'PaymentController.store')
-  Route.post('payment', 'PaymentController.boleto')
+  Route.post('payment-boleto', 'PaymentController.boleto')
+  Route.post('payment-cartao', 'PaymentController.cartao')
   Route.get('user-payment', 'UserPaymentController.index')
   Route.get('search-payments-today', 'SearchPaymentController.show_today')
   Route.get('search-payments-month', 'SearchPaymentController.show_month')
