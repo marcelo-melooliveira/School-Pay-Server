@@ -49,7 +49,7 @@ class PaymentController {
    const ref = await uidgen.generate();
   
   
-    const pay =  await Payment.create({
+      await Payment.create({
       user_id: auth.user.id,
       student_id: student_id,
       preference: 'nula',
@@ -58,7 +58,6 @@ class PaymentController {
       ref: ref,
       data_criacao: new Date(),
       data_ref: data_ref
-  
     });
     
     const item = {
