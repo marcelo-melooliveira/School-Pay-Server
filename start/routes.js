@@ -14,6 +14,7 @@ Route.post('passwords', 'ForgotPasswordController.store')
 Route.put('passwords', 'ForgotPasswordController.update')
 
 Route.get('search-status-payment/:ref', 'StatusPaymentController.show')
+// Route.get('update-status-payment-cartao/:ref/:message', 'StatusPaymentController.update_cartao')
 Route.post('update-status-payment/:ref', 'StatusPaymentController.update')
 
 

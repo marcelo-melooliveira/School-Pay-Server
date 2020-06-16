@@ -74,18 +74,18 @@ class PaymentController {
         items: [item],
         payer : {
           email: email,
-          first_name: first_name,
-          last_name: last_name,
+          name: `${first_name} ${last_name}`,
+          surname: first_name,
           identification: {
               type: 'CPF',
               number: cpf
           },
         },
-        // "payment_methods": {
-        //   "excluded_payment_types":[
-        //       {"id":"credit_card"}
-        //   ]
-        // },
+        "payment_methods": {
+          "excluded_payment_types":[
+              {"id":"ticket"}
+          ]
+        },
         auto_return : "approved",
         //external_reference : id,
         notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
@@ -100,9 +100,7 @@ class PaymentController {
       try {
         const preference = await MercadoPago.preferences.create(payment_data);
         //console.log(preference)
-      
-
-        pay.preference = preference.body.id;
+        // pay.preference = preference.body.id;
         const sucess = await pay.save();
 
         if(sucess)
