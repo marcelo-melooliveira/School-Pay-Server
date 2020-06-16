@@ -75,15 +75,14 @@ class PaymentController {
         payer : {
           email: email,
           name: `${first_name} ${last_name}`,
-          surname: first_name,
           identification: {
               type: 'CPF',
               number: cpf
           },
         },
-        "payment_methods": {
-          "excluded_payment_types":[
-              {"id":"ticket"}
+        payment_methods: {
+          excluded_payment_types:[
+              {id:"ticket"}
           ]
         },
         auto_return : "approved",
@@ -98,12 +97,7 @@ class PaymentController {
   
       //Generate init_point to checkout
       try {
-        const preference = await MercadoPago.preferences.create(payment_data);
-        //console.log(preference)
-        // pay.preference = preference.body.id;
-        const sucess = await pay.save();
-
-        if(sucess)
+        const preference = await MercadoPago.preferences.create(payment_data);       
         return ({preference_id: preference.body.id, public_key: Env.get('MP_PUBLIC_KEY')})
         //return response.redirect(`${preference.body.sandbox_init_point}`);
         
