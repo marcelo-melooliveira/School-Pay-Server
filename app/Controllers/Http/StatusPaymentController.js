@@ -25,6 +25,7 @@ class StatusPaymentController {
     sandbox: Env.get('MP_SANDBOX'),
     access_token: Env.get('MP_ACCESS_TOKEN'),
   });
+
     const {ref} = params
     const { data, action } = request.all()
     try{

@@ -55,7 +55,7 @@ class PaymentController {
       preference: 'nula',
       tipo_pagamento: 'cartao',
       status: 'S/N',
-      ref: ref,
+      ref: ref.toLowerCase(),
       data_criacao: new Date(),
       data_ref: data_ref
     });
@@ -88,7 +88,7 @@ class PaymentController {
         //external_reference : id,
         notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
         back_urls : {
-          success : "https://mellus.com.br/",
+          success : `https://mellus.com.br/update-status-payment/${ref}`,
          // pending : "http://68.183.156.246:3000/payments/pending/?user=teste",
          // failure : "http://68.183.156.246:3000/payments/failure/?user=teste",
         }
@@ -156,7 +156,7 @@ async boleto({ request, response, auth }){
     preference: 'nula',
     tipo_pagamento: 'boleto',
     status: 'S/N',
-    ref: ref,
+    ref: ref.toLowerCase(),
     data_criacao: new Date(),
     data_ref: data_ref
 
