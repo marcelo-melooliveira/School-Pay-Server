@@ -48,6 +48,7 @@ class StatusPaymentController {
             
           if(res.data.status == 'approved'){
               payment.status = 'Pago';
+              payment.preference = data.id;
               payment.data_pagamento = res.data.date_last_updated;
               payment.valor_pago = res.data.transaction_details.total_paid_amount;
             }else if(res.data.status == 'pending'){
