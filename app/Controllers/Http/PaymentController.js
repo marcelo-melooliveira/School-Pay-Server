@@ -47,6 +47,7 @@ class PaymentController {
   
    const uidgen = new UIDGenerator();
    const ref = await uidgen.generate();
+   const nova_ref = ref.toLowerCase()
   
   
       await Payment.create({
@@ -55,7 +56,7 @@ class PaymentController {
       preference: 'nula',
       tipo_pagamento: 'cartao',
       status: 'S/N',
-      ref: ref.toLowerCase(),
+      ref: nova_ref,
       data_criacao: new Date(),
       data_ref: data_ref
     });
