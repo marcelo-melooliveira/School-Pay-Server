@@ -47,7 +47,7 @@ class PaymentController {
   
    const uidgen = new UIDGenerator();
    const ref = await uidgen.generate();
-   const nova_ref = ref.toLowerCase()
+  // const nova_ref = ref.toLowerCase()
   
   
       await Payment.create({
@@ -56,7 +56,7 @@ class PaymentController {
       preference: 'nula',
       tipo_pagamento: 'cartao',
       status: 'S/N',
-      ref: nova_ref,
+      ref: ref,
       data_criacao: new Date(),
       data_ref: data_ref
     });
@@ -85,11 +85,11 @@ class PaymentController {
               {id:"ticket"}
           ]
         },
-        auto_return : "approved",
+        auto_return : "all",
         //external_reference : id,
-        notification_url :`https://mellus.com.br/update-status-payment/${nova_ref}`,
+        notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
         back_urls : {
-          success : `https://mellus.com.br/update-status-payment/${nova_ref}`,
+          success : `https://mellus.com.br/`,
          // pending : "http://68.183.156.246:3000/payments/pending/?user=teste",
          // failure : "http://68.183.156.246:3000/payments/failure/?user=teste",
         }
@@ -98,7 +98,7 @@ class PaymentController {
       //Generate init_point to checkout
       try {
         const preference = await MercadoPago.preferences.create(payment_data);       
-        return ({preference_id: preference.body.id, public_key: Env.get('MP_PUBLIC_KEY')})
+        return ({ref: ref, preference_id: preference.body.id, public_key: Env.get('MP_PUBLIC_KEY')})
         //return response.redirect(`${preference.body.sandbox_init_point}`);
         
       }catch(err){
@@ -149,7 +149,7 @@ async boleto({ request, response, auth }){
 
  const uidgen = new UIDGenerator();
  const ref = await uidgen.generate();
- const nova_ref = ref.toLowerCase();
+ //const nova_ref = ref.toLowerCase();
 
 
   const pay =  await Payment.create({
@@ -158,7 +158,7 @@ async boleto({ request, response, auth }){
     preference: 'nula',
     tipo_pagamento: 'boleto',
     status: 'S/N',
-    ref: nova_ref,
+    ref: ref,
     data_criacao: new Date(),
     data_ref: data_ref
 
@@ -185,7 +185,7 @@ async boleto({ request, response, auth }){
       //     federal_unit: 'SP'
       // }
     },
-    notification_url :`https://mellus.com.br/update-status-payment/${nova_ref}`,
+    notification_url :`https://mellus.com.br/update-status-payment/${ref}`,
   };
 
   try{

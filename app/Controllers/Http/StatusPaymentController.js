@@ -55,7 +55,7 @@ class StatusPaymentController {
               payment.valor_pago = 0;
             }
             const novo_pay = await payment.save();
-            return response.status(200).send(novo_pay)
+            return response.status(200).send({sucess: novo_pay})
       }
 
       return response.status(200).send('ok')
@@ -73,7 +73,7 @@ class StatusPaymentController {
   //     sandbox: Env.get('MP_SANDBOX'),
   //     access_token: Env.get('MP_ACCESS_TOKEN'),
   //   });
-  //     const {ref, message} = params
+  //     const {ref, collection_id, collection_status} = params
   //       const payment = await Payment.findByOrFail({ref: ref})
   //       payment.status = message
 
