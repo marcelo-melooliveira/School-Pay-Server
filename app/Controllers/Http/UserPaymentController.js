@@ -5,6 +5,7 @@ class UserpaymentController {
   async index({auth}){
     const payment_user = await Payment.query()
                                       .where({user_id:auth.user.id})
+                                      .orderBy('data_criacao', 'desc')
                                       .with('student')
                                       .fetch()
     return payment_user

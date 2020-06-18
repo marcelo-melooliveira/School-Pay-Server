@@ -7,6 +7,7 @@ Route.get('/', () => {
   return { greeting: 'Servidor no ar, configurado por Marcelo Melo!' }
 })
 
+
 Route.post('users', 'UserController.store')
 Route.post('sessions', 'SessionController.store')
 
