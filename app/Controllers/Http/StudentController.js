@@ -21,6 +21,26 @@ class StudentController {
     return students
   }
 
+  async show({params}){
+    const {matricula} = params
+    console.log(matricula)
+    const student = await Student.query().where({matricula: matricula})
+                                                  .select('id',
+                                                  'username',
+                                                  'matricula',
+                                                  'cpf',
+                                                  'rg',
+                                                  'endereco',
+                                                  'telefone',
+                                                  'valor_mensalidade',
+                                                  'nome_responsavel',
+                                                  'updated_at'
+                                                  )
+                                                  .fetch()
+                                                 
+      return (student)    
+  }
+
   async store({request}){
     const data = request.all();
     const student = Student.create(data)

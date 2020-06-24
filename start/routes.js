@@ -29,6 +29,7 @@ Route.group(()=>{
   Route.get('search-payments-month', 'SearchPaymentController.show_month')
   
   Route.get('students', 'StudentController.index')
+  Route.get('search-student/:matricula', 'StudentController.show')
   Route.post('students', 'StudentController.store')
   Route.put('students', 'StudentController.update')
   Route.delete('students/:id', 'StudentController.destroy')
