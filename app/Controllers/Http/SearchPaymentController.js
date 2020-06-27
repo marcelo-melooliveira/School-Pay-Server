@@ -10,6 +10,7 @@ class SearchPaymentController {
     const parsedDate = DateFNS.parseISO(date)
     const payment_today = await Payment.query()
                                       .whereBetween('data_criacao', [DateFNS.startOfDay(parsedDate), DateFNS.endOfDay(parsedDate)])
+                                      .orderBy('data_criacao', 'desc')
                                       .with('student', (query) =>{query.setVisible(['username', 'matricula'])})
                                       .with('user', (query) =>{query.setVisible(['username', 'email'])})
                                       .fetch()
